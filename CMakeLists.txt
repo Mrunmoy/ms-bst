@@ -23,5 +23,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
 SET(CPP_PLATFORM Gcc)
 
+include_directories(inc)
 
 add_executable(ms_bst src/bst.c src/queue.c test/main.c inc/bst.h inc/queue.h inc/debug.h)

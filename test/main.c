@@ -126,52 +126,84 @@ typedef struct testInput_t {
 bool operateOnInput(testInput_t *tstInp, int tc) {
   if ( !tstInp || !tstInp->bst ) return false;
 
-  // insert test, hasItem test
-  for (int i = 0; i < tstInp->size; i++) {
-    if (!insertTreeNode(tstInp->bst, tstInp->array[i])) return false;
-    if (!hasItem(tstInp->bst, tstInp->array[i])) return false;
-  }
+  bool result = true;
+  do
+  {
+    // insert test, hasItem test
+    for (int i = 0; i < tstInp->size; i++) {
+      if (!insertTreeNode(tstInp->bst, tstInp->array[i])) {
+        result =  false;
+        break;
+      }
+      if (!hasItem(tstInp->bst, tstInp->array[i])) {
+        result = false;
+        break;
+      }
+    }
 
-  // preorder, postOrder, inOrder, breadthfirst tests
-  int *r = preOrder(tstInp->bst);
-  assert(r);
-  for (int i = 0;i < tstInp->bst->count; i++) {
-    if (r[i] != tstInp->preorder[i]) return false;
-  }
-  free(r);
+    // preorder, postOrder, inOrder, breadthfirst tests
+    int *r = preOrder(tstInp->bst);
+    assert(r);
+    for (int i = 0;i < tstInp->bst->count; i++) {
+      if (r[i] != tstInp->preorder[i]) {
+        result = false;
+        free(r);
+        break;
+      }
+    }
+    free(r);
 
-  r = postOrder(tstInp->bst);
-  assert(r);
-  for (int i = 0;i < tstInp->bst->count; i++) {
-    if (r[i] != tstInp->postorder[i]) return false;
-  }
-  free(r);
+    r = postOrder(tstInp->bst);
+    assert(r);
+    for (int i = 0;i < tstInp->bst->count; i++) {
+      if (r[i] != tstInp->postorder[i]) {
+        result = false;
+        free(r);
+        break;
+      }
+    }
+    free(r);
 
-  r = inOrder(tstInp->bst);
-  assert(r);
-  for (int i = 0;i < tstInp->bst->count; i++) {
-    if (r[i] != tstInp->inorder[i]) return false;
-  }
-  free(r);
+    r = inOrder(tstInp->bst);
+    assert(r);
+    for (int i = 0;i < tstInp->bst->count; i++) {
+      if (r[i] != tstInp->inorder[i]) {
+        result = false;
+        free(r);
+        break;
+      }
+    }
+    free(r);
 
-  r = breadthFirst(tstInp->bst);
-  assert(r);
-  for (int i = 0;i < tstInp->bst->count; i++) {
-    if (r[i] != tstInp->breadthFirst[i]) return false;
-  }
-  free(r);
+    r = breadthFirst(tstInp->bst);
+    assert(r);
+    for (int i = 0;i < tstInp->bst->count; i++) {
+      if (r[i] != tstInp->breadthFirst[i]) {
+        result = false;
+        free(r);
+        break;
+      }
+    }
+    free(r);
 
-  // remove then check for existence
-  for (int i = 0; i < tstInp->size; i++) {
-    if (!removeItem(tstInp->bst, tstInp->array[i])) return false;
-    if (hasItem(tstInp->bst, tstInp->array[i])) return false;
-  }
+    // remove then check for existence
+    for (int i = 0; i < tstInp->size; i++) {
+      if (!removeItem(tstInp->bst, tstInp->array[i])) {
+        result = false;
+        break;
+      }
+      if (hasItem(tstInp->bst, tstInp->array[i])) {
+        result = false;
+        break;
+      }
+    }
+  } while(0);
 
   destroyBST(tstInp->bst);
 
-  printf("Test case %d passed\n", tc);
+  printf("Test case %d %s\n", tc, result? "passed": "failed");
 
-  return true;
+  return result;
 }
 
 int main(void) {
@@ -185,7 +217,7 @@ int main(void) {
   int a11[] = { 1, 2 };
   int a11_pre[] = { 1, 2 };
   int a11_post[] = { 2, 1 };
-  int a11_in[] = { 1, 1 };
+  int a11_in[] = { 1, 2 };
   int a11_bfs[] = { 1, 2 };
 
   int a12[] = { 2, 1 };
@@ -358,16 +390,16 @@ int main(void) {
     .breadthFirst = a5_bfs
   };
 
-  if ( !operateOnInput(&t0, 1) ) printf("Test case %d failed\n", 1);
-  if ( !operateOnInput(&t1, 2) ) printf("Test case %d failed\n", 2);
-  if ( !operateOnInput(&t2, 3) ) printf("Test case %d failed\n", 3);
-  if ( !operateOnInput(&t3, 4) ) printf("Test case %d failed\n", 4);
-  if ( !operateOnInput(&t4, 5) ) printf("Test case %d failed\n", 5);
-  if ( !operateOnInput(&t5, 6) ) printf("Test case %d failed\n", 6);
-  if ( !operateOnInput(&t6, 7) ) printf("Test case %d failed\n", 7);
-  if ( !operateOnInput(&t7, 8) ) printf("Test case %d failed\n", 8);
-  if ( !operateOnInput(&t8, 9) ) printf("Test case %d failed\n", 9);
-  if ( !operateOnInput(&t9, 10) ) printf("Test case %d failed\n", 10);
+  operateOnInput(&t0, 1);
+  operateOnInput(&t1, 2);
+  operateOnInput(&t2, 3);
+  operateOnInput(&t3, 4);
+  operateOnInput(&t4, 5);
+  operateOnInput(&t5, 6);
+  operateOnInput(&t6, 7);
+  operateOnInput(&t7, 8);
+  operateOnInput(&t8, 9);
+  operateOnInput(&t9, 10);
 
   return 0;
 }
