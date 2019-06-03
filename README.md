@@ -1,2 +1,2 @@
 # ms-bst
-binary search tree
+using binary search tree for bfs
